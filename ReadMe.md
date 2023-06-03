@@ -1,7 +1,3 @@
----
-typora-root-url: ./image
----
-
 ## Hack The Box {inject}关卡
 
 Ip地址：
